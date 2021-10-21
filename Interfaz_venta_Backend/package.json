@@ -20,8 +20,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dbServer.js",
-    "dev": "nodemon dbServer.js"
+    "start": "node App.js",
+    "dev": "nodemon App.js"
   },
   "keywords": [],
   "author": "",
