@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "App.js",
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bluebird": "^3.7.2",

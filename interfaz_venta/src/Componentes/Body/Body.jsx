@@ -7,6 +7,7 @@ import DatePicker from 'react-date-picker';
 import Cantidad from './Cantidad'
 import TotalVenta from './TotalVenta'
 import { useAuth0 } from "@auth0/auth0-react";
+import apiBaseUrl from "../../Componentes/utils/Appiurl"
 
 
 function Body() {
@@ -43,7 +44,7 @@ function Body() {
 
     const getProducts = async () => {
         try {
-            const response = await fetch("http://localhost:3001/productos");
+            const response = await fetch(`${apiBaseUrl}/productos`);
             const jsonResponse = await response.json();
             const productoid = jsonResponse.data9;
             productoid.map((product) => {
