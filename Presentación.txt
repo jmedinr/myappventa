@@ -1,0 +1,3 @@
+Presentación:
+Soy Juan Diego Medina Rojas, desarrollador e ingeniero en telecomunicaciones. Actualmente hago parte de este proyecto de una aplicación de software que permita controlar las ventas físicas y virtuales de una empresa de manufactura y hacerles el correspondiente seguimiento.
+

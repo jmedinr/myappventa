@@ -1,0 +1,25 @@
+.bg-secondary{
+    background-color: #6c757d
+}
+
+.modal.is-open{
+    display: flex;
+}
+
+.modal-container{
+    position: relative;
+    padding:1rem;
+    min-width: 320px;
+    max-wight: 480px;
+    min-height: 200px;
+    min-height:600px;
+    overflow-y: auto;
+    background-color: #fff;
+
+}
+
+.modal-close{
+    position:absolute;
+    top:1rem;
+    right:1rem;
+}
