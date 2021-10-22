@@ -85,193 +85,25 @@ app.delete('/deletecliente/:id', (req, res) => {
     })
 });
 
-// Estado
-
-app.get('/estados', (req, res) => {
-    const sql = 'SELECT * FROM mydb.estado';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data3: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/estados/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM mydb.estado WHERE idestado = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data4: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.post('/addestado', (req, res) => {
-    const sql = 'INSERT INTO mydb.estado SET ?';
-
-    const estadoObj = {
-        idestado: req.body.idestado,
-        estado: req.body.estado,
-        producto_idproducto: req.body.producto_idproducto,
-    }
-
-    db.query(sql, estadoObj, err => {
-        if (err) throw err;
-        res.send("Estado Creado");
-    })
-});
-
-app.put('/updateestado/:id', (req, res) => {
-    const { id } = req.params;
-    const { estado, producto_idproducto } = req.body;
-    const sql = `UPDATE mydb.estado SET estado= '${estado}', producto_idproducto= ${producto_idproducto} WHERE idestado = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Estado Updated");
-    })
-});
-
-app.delete('/deleteestado/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.estado WHERE idestado = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Estado Deleted");
-    })
-});
-
-//Fecha
-
-app.get('/fechas', (req, res) => {
-    const sql = 'SELECT * FROM mydb.fecha';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data5: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/fechas/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM mydb.fecha WHERE idfecha = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data6: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.post('/addfecha', (req, res) => {
-    const sql = 'INSERT INTO mydb.fecha SET ?';
-
-    const fechaObj = {
-        idfecha: req.body.idfecha,
-        fechaInicial: req.body.fechaInicial,
-        fechaFinal: req.body.fechaFinal,
-    }
-
-    db.query(sql, fechaObj, err => {
-        if (err) throw err;
-        res.send("Fecha Creada");
-    })
-});
-
-app.put('/updatefecha/:id', (req, res) => {
-    const { id } = req.params;
-    const { fechaInicial, fechaFinal } = req.body;
-    const sql = `UPDATE mydb.fecha SET fechaInicial= '${fechaInicial}', fechaFinal= '${fechaFinal}' WHERE idfecha = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Fecha Updated");
-    })
-});
-
-app.delete('/deletefecha/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.fecha WHERE idfecha = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Fecha Deleted");
-    })
-});
-
-//Mercados
-
-app.get('/mercados', (req, res) => {
-    const sql = 'SELECT * FROM mydb.mercado';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data7: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-
-app.get('/mercados/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM mydb.mercado WHERE idmercado = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data8: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.post('/addmercado', (req, res) => {
-    const sql = 'INSERT INTO mydb.mercado SET ?';
-
-    const mercadoObj = {
-        idmercado: req.body.idmercado,
-        tipoTienda: req.body.tipoTienda,
-        producto_idproducto: req.body.producto_idproducto,
-    }
-
-    db.query(sql, mercadoObj, err => {
-        if (err) throw err;
-        res.send("Mercado Creado");
-    })
-});
-
-app.put('/updatemercado/:id', (req, res) => {
-    const { id } = req.params;
-    const { tipoTienda, producto_idproducto } = req.body;
-    const sql = `UPDATE mydb.mercado SET tipoTienda= '${tipoTienda}', producto_idproducto= ${producto_idproducto} WHERE idmercado = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Mercado Updated");
-    })
-});
-
-
-app.delete('/deletemercado/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.mercado WHERE idmercado = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Mercado Deleted");
-    })
-});
-
 
 //Productos
+
+
+app.post('/addproducto', (req, res) => {
+    const sql = 'INSERT INTO productos SET ?';
+
+    const clienteObj = {
+        idproducto: req.body.idproducto,
+        producto: req.body.producto,
+        precio: req.body.precio,
+        stock: req.body.stock
+    }
+
+    db.query(sql, clienteObj, err => {
+        if (err) throw err;
+        res.send("Producto Creado");
+    })
+});
 
 app.get('/productos', (req, res) => {
     const sql = 'SELECT * FROM productos';
@@ -279,6 +111,18 @@ app.get('/productos', (req, res) => {
         //if (err) throw err;
         if (results.length > 0) {
             res.json({ data9: results })
+        } else {
+            res.send('Not result');
+        }
+    });
+});
+
+app.get('/ventas', (req, res) => {
+    const sql = 'SELECT * FROM ventas';
+    db.query(sql, (err, results) => {
+        //if (err) throw err;
+        if (results.length > 0) {
+            res.json({ data10: results })
         } else {
             res.send('Not result');
         }
@@ -328,9 +172,9 @@ app.get('/cantidad/:id', (req, res) => {
     });
 });
 
-app.post('/addproducto', (req, res) => {
+app.post('/addventas', (req, res) => {
     try {
-        const sql = 'INSERT INTO productos SET ?';
+        const sql = 'INSERT INTO ventas SET ?';
         const productoObj = {
             idproducto: req.body.idproducto,
             producto: req.body.producto,
@@ -368,67 +212,6 @@ app.delete('/deleteproducto/:id', (req, res) => {
     db.query(sql, err => {
         if (err) throw err;
         res.send("Producto Deleted");
-    })
-});
-
-// Total Venta
-
-app.get('/totalventa', (req, res) => {
-    const sql = 'SELECT * FROM mydb.totalventa';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data13: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/totalventa/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM mydb.totalventa WHERE idtotalVenta = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data14: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.post('/addtotalventa', (req, res) => {
-    const sql = 'INSERT INTO mydb.totalventa SET ?';
-
-    const fechaObj = {
-        idtotalVenta: req.body.idtotalVenta,
-        totalVenta: req.body.totalVenta,
-        vendedor_idvendedor: req.body.vendedor_idvendedor,
-    }
-
-    db.query(sql, fechaObj, err => {
-        if (err) throw err;
-        res.send("Total Venta Creado");
-    })
-});
-
-app.put('/updatetotalventa/:id', (req, res) => {
-    const { id } = req.params;
-    const { totalVenta, vendedor_idvendedor } = req.body;
-    const sql = `UPDATE mydb.totalventa SET totalVenta= ${totalVenta}, vendedor_idvendedor= ${vendedor_idvendedor} WHERE idtotalVenta = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Total Venta Updated");
-    })
-});
-
-app.delete('/deletetotalventa/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.totalventa WHERE idtotalVenta = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Total Venta Deleted");
     })
 });
 
