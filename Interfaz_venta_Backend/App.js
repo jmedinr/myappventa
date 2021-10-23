@@ -178,12 +178,10 @@ app.post('/addventas', (req, res) => {
         const productoObj = {
             idproducto: req.body.idproducto,
             producto: req.body.producto,
-            stock: req.body.stock,
             fechaInicial: req.body.fechaInicial,
             fechaFinal: req.body.fechaFinal,
             tipoMercado: req.body.tipoMercado,
             estado: req.body.estado,
-            precio: req.body.precio,
             cantidad: req.body.cantidad,
             total_venta: req.body.total_venta
         }
