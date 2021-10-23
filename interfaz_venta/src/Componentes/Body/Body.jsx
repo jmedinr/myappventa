@@ -47,6 +47,7 @@ function Body() {
             const response = await fetch(`${apiBaseUrl}/productos`);
             const jsonResponse = await response.json();
             const productoid = jsonResponse.data9;
+            console.log(productoid)
             productoid.map((product) => {
                 productos.push(product.producto);
                 precios.push(product.precio);

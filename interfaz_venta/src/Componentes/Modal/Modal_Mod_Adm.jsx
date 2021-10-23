@@ -15,12 +15,13 @@ export default function Modal_Mod_Adm() {
     const [ventas, setVentas] = useState([]);
     const { isAuthenticated } = useAuth0();
 
-    const getProducts = async () => {
+    const getVentas = async () => {
         try {
             const response = await fetch(`${apiBaseUrl}/ventas`);
             const jsonResponse = await response.json();
             const responseVentas = jsonResponse.data10;
-            const listaVentas = responseVentas.map((vent) =>
+            console.log(jsonResponse);
+            const listaVentas = responseVentas.map((vent) =>{
                 <Fragment>
                     <tr data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                         <td>vent.idventa</td>
@@ -144,7 +145,7 @@ export default function Modal_Mod_Adm() {
                             </div>
                         </td>
                     </tr>
-                </Fragment>
+                </Fragment>}
             );
             setVentas(listaVentas)
         }
@@ -155,7 +156,7 @@ export default function Modal_Mod_Adm() {
     }
 
     useEffect(() => {
-        getProducts();
+        getVentas();
     }, [])
 
     return (
