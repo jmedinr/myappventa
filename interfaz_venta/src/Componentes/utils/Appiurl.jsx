@@ -1,2 +1,2 @@
-const apiBaseUrl = "https://ventasmisionticbackend.herokuapp.com/";
+const apiBaseUrl = "https://ventasmisionticbackend.herokuapp.com";
 export default apiBaseUrl;

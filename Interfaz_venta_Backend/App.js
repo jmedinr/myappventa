@@ -110,7 +110,7 @@ app.get('/productos', (req, res) => {
     db.query(sql, (err, results) => {
         //if (err) throw err;
         if (results.length > 0) {
-            res.json({ data9: results })
+            res.json({ data1: results })
         } else {
             res.send('Not result');
         }
@@ -122,7 +122,7 @@ app.get('/ventas', (req, res) => {
     db.query(sql, (err, results) => {
         //if (err) throw err;
         if (results.length > 0) {
-            res.json({ data10: results })
+            res.json({ data2: results })
         } else {
             res.send('Not result');
         }
@@ -136,7 +136,7 @@ app.get('/productos/:id', (req, res) => {
         db.query(sql, (err, results) => {
             console.log(err);
             if (results.length > 0) {
-                res.json({ data10: results })
+                res.json({ data3: results })
             } else {
                 res.send('Not result');
             }
@@ -146,30 +146,21 @@ app.get('/productos/:id', (req, res) => {
     }
 });
 
-app.get('/precio/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT precio FROM mydb.producto WHERE idproducto = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data11: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/cantidad/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT cantidad FROM mydb.producto WHERE idproducto = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data12: results })
-        } else {
-            res.send('Not result');
-        }
-    });
+app.get('/ventas/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const sql = `SELECT * FROM ventas WHERE idventa = ${id}`;
+        db.query(sql, (err, results) => {
+            console.log(err);
+            if (results.length > 0) {
+                res.json({ data4: results })
+            } else {
+                res.send('Not result');
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 app.post('/addventas', (req, res) => {

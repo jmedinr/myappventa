@@ -20,9 +20,9 @@ export default function Modal_Mod_Adm() {
             const response = await fetch(`${apiBaseUrl}/ventas`);
             const jsonResponse = await response.json();
             const responseVentas = jsonResponse.data10;
-            console.log(jsonResponse);
+            console.log("Venta:",jsonResponse);
             const listaVentas = responseVentas.map((vent) =>{
-                <Fragment>
+                <div>
                     <tr data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                         <td>vent.idventa</td>
                         <td>vent.documentocliente</td>
@@ -145,7 +145,7 @@ export default function Modal_Mod_Adm() {
                             </div>
                         </td>
                     </tr>
-                </Fragment>}
+                </div>}
             );
             setVentas(listaVentas)
         }
