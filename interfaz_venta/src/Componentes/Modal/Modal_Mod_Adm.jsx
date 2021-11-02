@@ -39,11 +39,17 @@ function Modal_Mod_Adm({ idVentas, Pventa, finicial, ffinal, tmercado, eventa, c
     let handleClose = async () => {
         let stockventa = []
         const response = await fetch(`${apiBaseUrl}/productosstock/'${firstProducton}'`);
+        console.log("response",response)
         const jsonResponse = await response.json();
+        console.log("jsonResponse",jsonResponse)
         const liststockventa = jsonResponse.data;
+        console.log("liststockventa",liststockventa)
         liststockventa.map((st) => {
             return stockventa.push(st.stock)
         })
+        console.log("stockventa[0]",stockventa[0])
+        console.log("caventa",caventa)
+        console.log("firstcantidadventan",firstcantidadventan)
         const stocknuevo = (stockventa[0] + caventa) - firstcantidadventan;
         const putData = {
             producto: firstProducton,
@@ -51,8 +57,8 @@ function Modal_Mod_Adm({ idVentas, Pventa, finicial, ffinal, tmercado, eventa, c
             fechaFinal: firstfechafinaln,
             tipoMercado: firsttipomercadon,
             estado: firstestadoventan,
-            cantidad: setFirstcantidadventan,
-            total_venta: firstputtotalventan,
+            cantidad: firstcantidadventan,
+            total_venta: firstputtotalventa,
             vendedor: firstvendedorventan,
             documentocliente: firstdocumentoventan,
             cliente: firstclienteventan,
