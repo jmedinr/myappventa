@@ -1,14 +1,13 @@
-/* eslint-disable no-fallthrough */
 import React, { useEffect, useState, Fragment } from 'react';
 import './Body.css'
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth0 } from "@auth0/auth0-react";
 import apiBaseUrl from "../../Componentes/utils/Appiurl";
 
-function BodyRegistrarP() {
-    const [productoP, setproductoP] = useState("");
-    const [precioP, setprecioP] = useState(0);
-    const [stockP, setstockP] = useState(0);
+function BodyRegistrarVendedor() {
+    const [nombreV, setnombreV] = useState("");
+    const [rolV, setrolV] = useState(0);
+    const [correoV, setcorreoV] = useState(0);
     const [show1, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
     const [validUser, setValidUser] = useState("");
@@ -18,12 +17,12 @@ function BodyRegistrarP() {
     const handleShow2 = () => setShow2(true);
     const handleShow = async () => {
         const postData = {
-            producto: productoP,
-            precio: precioP,
-            stock: stockP
+            nombreVendedor: nombreV,
+            rol: rolV,
+            correo: correoV
         };
         try {
-            const res = await fetch(`${apiBaseUrl}/addproducto`, {
+            const res = await fetch(`${apiBaseUrl}/addvendedor`, {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -36,13 +35,13 @@ function BodyRegistrarP() {
                 console.log(message);
             } else {
                 setShow(true);
-                setproductoP("");
-                setprecioP(0);
-                setstockP(0);
+				setnombreV("");
+                setrolV("");
+                setcorreoV("");
                 document.getElementById("FormControlIn1").value = "";
-                document.getElementById("FormControlIn2").value = 0;
-                document.getElementById("FormControlIn3").value = 0;
-                console.log("Producto Registrado");
+                document.getElementById("FormControlIn2").value = "";
+                document.getElementById("FormControlIn3").value = "";
+                console.log("Vendedor Registrado");
             }
         } catch (err) {
             console.log(err);
@@ -110,37 +109,40 @@ function BodyRegistrarP() {
         (validUser=="administrador") && (
             <div className="container-fluid bg-secondary text-white">
                 <div className="description">
-                    <h1>Agregar Productos</h1>
+                    <h1>Agregar Vendedor</h1>
                 </div>
                 <div className="row row-cols-3">
                     <div className="col-xxl-4">
                         <div className="example-wrapper">
-                            <label for="FormControlIn1" className="form-label">Producto</label>
+                            <label for="FormControlIn1" className="form-label">Nombre Del Vendedor</label>
                             <div className="input-group mb-1">
-                                <input type="text" className="form-control" onChange={e => setproductoP(e.target.value)} id="FormControlIn1" />
+                                <input type="text" className="form-control" onChange={e => setnombreV(e.target.value)} id="FormControlIn1" />
                             </div>
                         </div>
                     </div>
                     <div className="col-xxl-4">
-                        <label for="FormControlIn2" className="form-label">Stock</label>
-                        <input type="number" className="form-control" onChange={e => setstockP(e.target.value)} id="FormControlIn2" />
+                        <label for="FormControlIn2" className="form-label">Rol</label>
+						<select className="form-select mb-1" onChange={e => setrolV(e.target.value)} id="FormControlIn2">
+                            <option selected>Elige Un Rol</option>
+                            <option value="administrador">administrador</option>
+                            <option value="vendedor">vendedor</option>
+                        </select>
                     </div>
                     <div className="col-xxl-4">
-                        <label for="FormControlIn3" className="form-label">Precio</label>
+                        <label for="FormControlIn3" className="form-label">Correo</label>
                         <div className="input-group mb-1">
-                            <span className="input-group-text">$</span>
-                            <input type="number" className="form-control" onChange={e => setprecioP(e.target.value)} id="FormControlIn3" />
+                            <input type="email" className="form-control" onChange={e => setcorreoV(e.target.value)} id="FormControlIn3" />
                         </div>
                     </div>
                 </div>
                 <div className="container-fluid bg-secondary">
                     <Button className="btn btn-dark m-2" onClick={handleShow}>
-                        Registrar Producto
+                        Registrar Vendedor
                     </Button>
 
                     <Modal show={show1} onHide={handleClose}>
                         <Modal.Header closeButton />
-                        <Modal.Body>¡Producto Registrado!</Modal.Body>
+                        <Modal.Body>¡Vendedor Registrado!</Modal.Body>
                         <Modal.Footer>
                             <Button className="bg-dark" variant="primary" onClick={handleClose}>
                                 OK
@@ -149,7 +151,7 @@ function BodyRegistrarP() {
                     </Modal>
 
                     <Button className="btn btn-dark m-2" onClick={handleShow2}>
-                        Previsualizar Producto
+                        Previsualizar Vendedor
                     </Button>
 
                     <Modal show={show2} onHide={handleClose2}>
@@ -158,16 +160,16 @@ function BodyRegistrarP() {
                         </Modal.Header>
                         <Modal.Body>
                             <div className="mb-3">
-                                <label for="exampleTextarea1" className="form-label">Producto</label>
-                                <textarea class="form-control" id="exampleTextarea1" rows="1" value={productoP}></textarea>
+                                <label for="exampleTextarea1" className="form-label">Vendedor</label>
+                                <textarea class="form-control" id="exampleTextarea1" rows="1" value={nombreV}></textarea>
                             </div>
                             <div className="mb-3">
-                                <label for="exampleTextarea2" className="form-label">Precio</label>
-                                <textarea class="form-control" id="exampleTextarea2" rows="1" value={precioP}></textarea>
+                                <label for="exampleTextarea2" className="form-label">rol</label>
+                                <textarea class="form-control" id="exampleTextarea2" rows="1" value={rolV}></textarea>
                             </div>
                             <div className="mb-3">
-                                <label for="exampleTextarea3" className="form-label">Stock</label>
-                                <textarea class="form-control" id="exampleTextarea3" rows="1" value={stockP}></textarea>
+                                <label for="exampleTextarea3" className="form-label">Correo</label>
+                                <textarea class="form-control" id="exampleTextarea3" rows="1" value={correoV}></textarea>
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
@@ -180,4 +182,4 @@ function BodyRegistrarP() {
             </div>));
 };
 
-export default BodyRegistrarP
+export default BodyRegistrarVendedor

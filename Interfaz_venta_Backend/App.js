@@ -1,274 +1,264 @@
-const express = require("express")
-const cors = require('cors')
-const mysql = require("mysql2");
-const bodyParser = require('body-parser')
-const port = 3001;
+const express = require('express');
+const cors = require('cors');
 const app = express();
+const mysql = require('mysql2/promise');
+const port = 3001;
+const bluebird = require('bluebird');
+let connection; // variable para almacenar la conexión a la DB
 
-app.use(express.json())
-app.use(cors({ origin: true }))
+// configura el servidor para recibir datos en formato json
+app.use(express.json());
+app.use(cors({ origin: true }));
 
 app.set('port', process.env.PORT || port)
 
-const db = mysql.createPool({
-    host: "sql10.freesqldatabase.com",       //This is your localhost IP
-    user: "sql10445630",         // "newuser" created in Step 1(e)
-    password: "LlZzSbYFhk",  // password for the new user
-    database: "sql10445630",      // Database name
-    port: "3306"             // port name, "3306" by default
-})
-
-app.get('/', (req, res) => {
-    res.json("Welcome to my API Back");
+app.get("/", (req, res) => {
+    res.json("Backend misiontic Gestor Ventas");
 });
-
-// clientes
-
-app.get('/clientes', (req, res) => {
-    const sql = 'SELECT * FROM mydb.cliente';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data1: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/clientes/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM mydb.cliente WHERE idcliente = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data2: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.post('/addcliente', (req, res) => {
-    const sql = 'INSERT INTO mydb.cliente SET ?';
-
-    const clienteObj = {
-        idcliente: req.body.idcliente,
-        nombreCliente: req.body.nombreCliente,
-        documentoCliente: req.body.documentoCliente,
-        vendedor_idvendedor: req.body.vendedor_idvendedor
-    }
-
-    db.query(sql, clienteObj, err => {
-        if (err) throw err;
-        res.send("Cliente Creado");
-    })
-});
-
-app.put('/updatecliente/:id', (req, res) => {
-    const { id } = req.params;
-    const { nombreCliente, documentoCliente, vendedor_idvendedor } = req.body;
-    const sql = `UPDATE mydb.cliente SET nombreCliente = '${nombreCliente}', documentoCliente= ${documentoCliente},vendedor_idvendedor = ${vendedor_idvendedor} WHERE idcliente = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Cliente Updated");
-    })
-});
-
-
-app.delete('/deletecliente/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.cliente WHERE idcliente = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Cliente Deleted");
-    })
-});
-
 
 //Productos
 
-
-app.post('/addproducto', (req, res) => {
-    const sql = 'INSERT INTO productos SET ?';
-
-    const clienteObj = {
-        idproducto: req.body.idproducto,
-        producto: req.body.producto,
-        precio: req.body.precio,
-        stock: req.body.stock
+app.get("/productos", async (req, res) => {
+    try {
+        const [rows, fields] = await connection.execute("SELECT * FROM mydb.productos");
+        res.json({ data: rows });
     }
-
-    db.query(sql, clienteObj, err => {
-        if (err) throw err;
-        res.send("Producto Creado");
-    })
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
 });
 
-app.get('/productos', (req, res) => {
-    const sql = 'SELECT * FROM productos';
-    db.query(sql, (err, results) => {
-        //if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data1: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/ventas', (req, res) => {
-    const sql = 'SELECT * FROM ventas';
-    db.query(sql, (err, results) => {
-        //if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data2: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/productos/:id', (req, res) => {
+app.get("/productos/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const sql = `SELECT * FROM productos WHERE idproducto = ${id}`;
-        db.query(sql, (err, results) => {
-            console.log(err);
-            if (results.length > 0) {
-                res.json({ data3: results })
-            } else {
-                res.send('Not result');
-            }
-        });
-    } catch (error) {
+        const [rows, fields] = await connection.execute(`SELECT * FROM mydb.productos WHERE idproducto = ${id}`);
+        res.json({ data: rows });
+    }
+    catch (error) {
         console.log(error);
+        res.json(error)
     }
 });
 
-app.get('/ventas/:id', (req, res) => {
+app.get("/productosprecio/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const sql = `SELECT * FROM ventas WHERE idventa = ${id}`;
-        db.query(sql, (err, results) => {
-            console.log(err);
-            if (results.length > 0) {
-                res.json({ data4: results })
-            } else {
-                res.send('Not result');
-            }
-        });
-    } catch (error) {
+        const [rows, fields] = await connection.execute(`SELECT precio FROM mydb.productos WHERE producto = ${id}`);
+        res.json({ data: rows });
+    }
+    catch (error) {
         console.log(error);
+        res.json(error)
     }
 });
 
-app.post('/addventas', (req, res) => {
+app.get("/productosstock/:id", async (req, res) => {
     try {
-        const sql = 'INSERT INTO ventas SET ?';
-        const productoObj = {
-            idproducto: req.body.idproducto,
-            producto: req.body.producto,
-            fechaInicial: req.body.fechaInicial,
-            fechaFinal: req.body.fechaFinal,
-            tipoMercado: req.body.tipoMercado,
-            estado: req.body.estado,
-            cantidad: req.body.cantidad,
-            total_venta: req.body.total_venta
-        }
-        db.query(sql, productoObj, err => {
-            console.log(err);
-            res.send("Producto Creado");
-        })
+        const { id } = req.params;
+        const [rows, fields] = await connection.execute(`SELECT stock FROM mydb.productos WHERE producto = ${id}`);
+        res.json({ data: rows });
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.put("/update-stock/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { stock } = req.body;
+        await connection.execute(`UPDATE mydb.productos SET stock = ${stock} WHERE producto = ${id}`);
+        res.json({ status: "ok" })
     } catch (error) {
         console.log(error);
+        res.json(error)
     }
 });
 
-app.put('/updateproducto/:id', (req, res) => {
-    const { id } = req.params;
-    const { producto, stock, precio, cantidad, vendedor_idvendedor } = req.body;
-    const sql = `UPDATE mydb.producto SET producto = '${producto}', stock = ${stock}, precio = ${precio}, cantidad = ${cantidad}, vendedor_idvendedor = ${vendedor_idvendedor} WHERE idproducto = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Producto Updated");
-    })
-});
-
-app.delete('/deleteproducto/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.producto WHERE idproducto = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Producto Deleted");
-    })
-});
-
-// Vendedores
-
-app.get('/vendedores', (req, res) => {
-    const sql = 'SELECT * FROM mydb.vendedor';
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data15: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.get('/vendedores/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM mydb.vendedor WHERE idvendedor = ${id}`;
-    db.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            res.json({ data16: results })
-        } else {
-            res.send('Not result');
-        }
-    });
-});
-
-app.post('/addvendedor', (req, res) => {
-    const sql = 'INSERT INTO mydb.vendedor SET ?';
-
-    const vendedorObj = {
-        idvendedor: req.body.idvendedor,
-        nombreVendedor: req.body.nombreVendedor,
-        fecha_idfecha: req.body.fecha_idfecha,
+app.post("/addproducto", async (req, res) => {
+    try {
+        const { producto, precio, stock } = req.body;
+        await connection.execute(`INSERT INTO mydb.productos (producto, precio, stock) VALUES('${producto}',${precio}, ${stock})`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
     }
 
-    db.query(sql, vendedorObj, err => {
-        if (err) throw err;
-        res.send("Vendedor Creado");
-    })
 });
 
-app.put('/updatevendedor/:id', (req, res) => {
+app.put('/updateproducto/:id', async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { producto, precio, stock } = req.body;
+        await connection.execute(`UPDATE mydb.productos SET producto = '${producto}', precio = ${precio}, stock = ${stock} WHERE idproducto = ${id}`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.delete('/deleteproducto/:id', async(req, res) => {
+    try {
+        const { id } = req.params;
+        await connection.execute(`DELETE FROM mydb.productos WHERE idproducto = ${id}`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+//Ventas
+
+app.get("/ventas", async (req, res) => {
+    try {
+        const [rows, fields] = await connection.execute('SELECT * FROM mydb.ventas');
+        res.json({ data: rows });
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.get("/ventas/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows, fields] = await connection.execute(`SELECT * FROM mydb.ventas WHERE idventa = ${id}`);
+        res.json({ data: rows });
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.post("/addventas", async (req, res) => {
+    try {
+        const { producto, fechaInicial, fechaFinal, tipoMercado, estado, cantidad, total_venta, vendedor, documentocliente, cliente } = req.body;
+        await connection.execute(`INSERT INTO mydb.ventas (producto,fechaInicial,fechaFinal,tipoMercado,estado,cantidad,total_venta,vendedor,documentocliente,cliente) VALUES('${producto}','${fechaInicial}', '${fechaFinal}', '${tipoMercado}','${estado}', ${cantidad}, ${total_venta},'${vendedor}',${documentocliente},'${cliente}')`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.put('/updateventa/:id', async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { producto, fechaInicial, fechaFinal, tipoMercado, estado, cantidad, total_venta, vendedor, documentocliente, cliente } = req.body;
+        await connection.execute(`UPDATE mydb.ventas SET producto = '${producto}', fechaInicial = '${fechaInicial}',fechaFinal= '${fechaFinal}',tipoMercado= '${tipoMercado}',estado= '${estado}',cantidad= ${cantidad},total_venta= ${total_venta},vendedor= '${vendedor}',documentocliente= ${documentocliente},cliente= '${cliente}' WHERE idventa = ${id}`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.delete('/deleteventa/:id', async(req, res) => {
+    try {
+        const { id } = req.params;
+        await connection.execute(`DELETE FROM mydb.ventas WHERE idventa = ${id}`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+//Vendedores
+
+app.get("/vendedores", async (req, res) => {
+    try {
+        const [rows, fields] = await connection.execute('SELECT * FROM mydb.vendedores');
+        res.json({ data: rows });
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.get("/vendedores/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows, fields] = await connection.execute(`SELECT * FROM mydb.vendedores WHERE idvendedores = ${id}`);
+        res.json({ data: rows });
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.get('/get-vendedores/:id', async(req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows, fields] = await connection.execute(`SELECT * FROM mydb.vendedores WHERE correo = ${id}`);
+        res.json(rows[0]);
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.post("/addvendedor", async (req, res) => {
+    try {
+        const { nombreVendedor,rol,correo} = req.body;
+        await connection.execute(`INSERT INTO mydb.vendedores (nombreVendedor,rol,correo) VALUES('${nombreVendedor}','${rol}', '${correo}')`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
+});
+
+app.put('/updatevendedor/:id', async(req, res) => {
     const { id } = req.params;
-    const { nombreVendedor, fecha_idfecha } = req.body;
-    const sql = `UPDATE mydb.vendedor SET nombreVendedor= '${nombreVendedor}', fecha_idfecha= '${fecha_idfecha}' WHERE idvendedor = ${id}`;
+    const { nombreVendedor, rol, correo} = req.body;
+    await connection.execute(`UPDATE vendedores SET nombreVendedor= '${nombreVendedor}', rol= '${rol}', correo= '${correo}' WHERE idvendedor = ${id}`);
+    res.json({ status: "ok" })
+    const sql = `UPDATE mydb.vendedores SET nombreVendedor= '${nombreVendedor}', rol= '${rol}', correo= '${correo}' WHERE idvendedor = ${id}`;
     db.query(sql, err => {
         if (err) throw err;
         res.send("Vendedor Updated");
     })
 });
 
-app.delete('/deletevendedor/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM mydb.vendedor WHERE idvendedor = ${id}`;
-    db.query(sql, err => {
-        if (err) throw err;
-        res.send("Vendedor Deleted");
-    })
+app.delete('/deletevendedor/:id', async(req, res) => {
+    try {
+        const { id } = req.params;
+        await connection.execute(`DELETE FROM mydb.vendedores WHERE idvendedor = ${id}`);
+        res.json({ status: "ok" })
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error)
+    }
 });
 
-app.listen(app.get('port'),
-    () => console.log(`Server Started on port ${port}...`))
 
-db.getConnection((err, connection) => {
-    if (err) throw (err)
-    console.log("DB connected successful: " + connection.threadId)
-})
+app.listen(app.get('port'), async () => {
+    connection = await mysql.createConnection({
+        host: '181.142.34.100',
+        user: 'jmedinr',
+        password: '1J23u45a67n89',
+        database: 'mydb',
+        port: 3306,
+        Promise: bluebird
+    });
+    console.log("Server running on port: " + app.get('port'));
+});

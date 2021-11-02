@@ -1,2 +1,2 @@
-const apiBaseUrl = "https://ventasmisionticbackend.herokuapp.com";
+const apiBaseUrl = "http://localhost:3001";
 export default apiBaseUrl;
