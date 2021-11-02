@@ -111,7 +111,6 @@ function Header_Admin() {
                                             <div>{user.name}</div>
                                             <p>{user.email}</p>
                                         </li>
-                                        <li><Link to="/agregar_productos" className="dropdown-item">Agregar Producto</Link></li>
                                         <li>
                                             <hr className="dropdown-divider" />
                                         </li>

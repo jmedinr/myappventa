@@ -253,10 +253,10 @@ app.delete('/deletevendedor/:id', async(req, res) => {
 
 app.listen(app.get('port'), async () => {
     connection = await mysql.createConnection({
-        host: '181.142.34.100',
-        user: 'jmedinr',
-        password: '1J23u45a67n89',
-        database: 'mydb',
+        host: 'tu_host',
+        user: 'tu_user',
+        password: 'tu_password',
+        database: 'nombre_bd',
         port: 3306,
         Promise: bluebird
     });

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState, useEffect } from "react";
 import './Table.css'
-import "../Filtro_Venta/Filtro_Venta"
+import "../Filtro_Venta/Filtro_VentaP"
 import { useAuth0 } from "@auth0/auth0-react";
 import apiBaseUrl from "../../Componentes/utils/Appiurl"
 import Modal_Modificar from "../Modal/Modal_Modificar"
@@ -120,8 +120,8 @@ function Table_Producto() {
 
     return (
         <div className="containter-fluid p-2">
-            <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar En La Tabla" />
             <div className="container-fluid">
+                <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar En La Tabla" />
                 <div className="col-md-12">
                     <div className="panel panel-default">
                         <div className="panel-body">

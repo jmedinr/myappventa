@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState, useEffect } from "react";
 import './Table.css'
-import "../Filtro_Venta/Filtro_Venta"
+import "../Filtro_Venta/Filtro_VentaV"
 import { useAuth0 } from "@auth0/auth0-react";
 import apiBaseUrl from "../../Componentes/utils/Appiurl"
 import Modal_Mod_Ven from "../Modal/Modal_Mod_Ven"
 
 
 function Table_Vendedor() {
-    let idVendedor = [],nombreV = [], rolV = [], correoV = [];
+    let idVendedor = [], nombreV = [], rolV = [], correoV = [];
     let listaVentas2 = [];
     const [vendedores, setVendedores] = useState([]);
     const { user, isAuthenticated, loginWithRedirect } = useAuth0();
@@ -42,10 +42,10 @@ function Table_Vendedor() {
             if (userData.rol == "administrador") {
                 localStorage.setItem("state", userData.rol);
                 setValidUser("administrador");
-            }else if (userData.rol == "vendedor"){
+            } else if (userData.rol == "vendedor") {
                 localStorage.setItem("state", userData.rol);
                 setValidUser("vendedor");
-            }else{
+            } else {
                 setValidUser("");
             }
         }
@@ -93,7 +93,7 @@ function Table_Vendedor() {
                                                 <div className="p-3 border bg-light"><strong>Correo: </strong><a>{correoV[i]}</a></div>
                                             </div>
                                         </div>
-                                        {(validUser=="administrador") ?
+                                        {(validUser == "administrador") ?
                                             <div className="container-fluid">
                                                 <Modal_Mod_Ven idVendedores={idVendedor[i]} vnombre={nombreV[i]} vrol={rolV[i]} vcorreo={correoV[i]}></Modal_Mod_Ven>
                                             </div> : null}
@@ -120,8 +120,8 @@ function Table_Vendedor() {
 
     return (
         <div className="containter-fluid p-2">
-            <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar En La Tabla" />
             <div className="container-fluid">
+                <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar En La Tabla" />
                 <div className="col-md-12">
                     <div className="panel panel-default">
                         <div className="panel-body">

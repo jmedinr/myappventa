@@ -9,7 +9,7 @@ import * as moment from 'moment'
 
 
 function Table_Admin() {
-    let idVenta = [],productoventa = [], fechainicial = [], fechafinal = [], tipomercado = [], estadoventa = [], cantidadventa = [], totalventa = [], vendedorventa = [], documentoventa = [], clienteventa = [];
+    let idVenta = [], productoventa = [], fechainicial = [], fechafinal = [], tipomercado = [], estadoventa = [], cantidadventa = [], totalventa = [], vendedorventa = [], documentoventa = [], clienteventa = [];
     let listaVentas2 = [];
     const [ventas, setVentas] = useState([]);
     const { user, isAuthenticated, loginWithRedirect } = useAuth0();
@@ -43,10 +43,10 @@ function Table_Admin() {
             if (userData.rol == "administrador") {
                 localStorage.setItem("state", userData.rol);
                 setValidUser("administrador");
-            }else if (userData.rol == "vendedor"){
+            } else if (userData.rol == "vendedor") {
                 localStorage.setItem("state", userData.rol);
                 setValidUser("vendedor");
-            }else{
+            } else {
                 setValidUser("");
             }
         }
@@ -120,7 +120,7 @@ function Table_Admin() {
                                                 <div className="p-3 border bg-light"><strong>Total Venta: </strong><a>{totalventa[i]}</a></div>
                                             </div>
                                         </div>
-                                        {(validUser=="administrador"||validUser=="vendedor") ?
+                                        {(validUser == "administrador" || validUser == "vendedor") ?
                                             <div className="container-fluid">
                                                 <Modal_Modificar_Admin idVentas={idVenta[i]} Pventa={productoventa[i]} finicial={fechainicial[i]} ffinal={fechafinal[i]} tmercado={tipomercado[i]} eventa={estadoventa[i]} caventa={cantidadventa[i]} tventa={totalventa[i]} vventa={vendedorventa[i]} dventa={documentoventa[i]} cventa={clienteventa[i]}></Modal_Modificar_Admin>
                                             </div> : null}
@@ -147,8 +147,8 @@ function Table_Admin() {
 
     return (
         <div className="containter-fluid p-2">
-            <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar En La Tabla" />
             <div className="container-fluid">
+                <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar En La Tabla" />
                 <div className="col-md-12">
                     <div className="panel panel-default">
                         <div className="panel-body">
