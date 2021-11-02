@@ -262,7 +262,7 @@ const Body = () => {
     }, [isAuthenticated, validUser])
 
     return (
-        (validUser=="admnistrador"||validUser=="vendedor") && (
+        (validUser=="administrador"||validUser=="vendedor") && (
             <div className="container-fluid bg-secondary text-white">
                 <div className="row row-cols-2">
                     <div className="col-xxl-12">
